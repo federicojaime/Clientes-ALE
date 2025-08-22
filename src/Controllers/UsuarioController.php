@@ -5,29 +5,33 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Utils\Database;
 
-class UsuarioController
+class UsuarioController extends BaseController
 {
     public function getAll(Request $request, Response $response): Response
     {
         try {
+            $params = $request->getQueryParams();
+            $limit = min((int) ($params['limit'] ?? 50), 100);
+            
             $stmt = Database::execute(
-                "SELECT u.id, u.nombre, u.apellido, u.email, u.telefono, u.ciudad, tu.nombre as tipo_usuario
+                "SELECT u.id, u.nombre, u.apellido, u.email, u.telefono, u.ciudad, u.verificado,
+                        tu.nombre as tipo_usuario, u.created_at
                  FROM usuarios u 
                  JOIN tipos_usuario tu ON u.tipo_usuario_id = tu.id 
                  WHERE u.activo = 1 
-                 ORDER BY u.created_at DESC LIMIT 50"
+                 ORDER BY u.created_at DESC 
+                 LIMIT {$limit}"
             );
             
             $usuarios = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $usuarios,
+            return $this->successResponse($response, [
+                'usuarios' => $usuarios,
                 'total' => count($usuarios)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo usuarios: ' . $e->getMessage(), 500);
         }
     }
     
@@ -47,22 +51,16 @@ class UsuarioController
             $usuario = $stmt->fetch();
             
             if (!$usuario) {
-                return $this->jsonResponse($response, ['error' => 'Usuario no encontrado'], 404);
+                return $this->errorResponse($response, 'Usuario no encontrado', 404);
             }
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $usuario
-            ]);
+            // Remover datos sensibles
+            unset($usuario['google_id'], $usuario['facebook_id'], $usuario['apple_id']);
+            
+            return $this->successResponse($response, $usuario);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo usuario: ' . $e->getMessage(), 500);
         }
-    }
-    
-    private function jsonResponse(Response $response, array $data, int $status = 200): Response
-    {
-        $response->getBody()->write(json_encode($data, JSON_PRETTY_PRINT));
-        return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
     }
 }

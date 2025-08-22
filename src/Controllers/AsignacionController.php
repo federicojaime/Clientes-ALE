@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Utils\Database;
 
-class AsignacionController
+class AsignacionController extends BaseController
 {
     public function getAll(Request $request, Response $response): Response
     {
@@ -14,11 +14,11 @@ class AsignacionController
             $estado = $params['estado'] ?? null;
             $limit = min((int) ($params['limit'] ?? 20), 100);
             
-            $whereClause = '';
+            $whereClause = 'WHERE 1=1';
             $queryParams = [];
             
             if ($estado) {
-                $whereClause = 'WHERE a.estado = ?';
+                $whereClause .= ' AND a.estado = ?';
                 $queryParams[] = $estado;
             }
             
@@ -40,14 +40,13 @@ class AsignacionController
             
             $asignaciones = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $asignaciones,
+            return $this->successResponse($response, [
+                'asignaciones' => $asignaciones,
                 'total' => count($asignaciones)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo asignaciones: ' . $e->getMessage(), 500);
         }
     }
     
@@ -83,14 +82,13 @@ class AsignacionController
             
             $asignaciones = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $asignaciones,
+            return $this->successResponse($response, [
+                'asignaciones' => $asignaciones,
                 'total' => count($asignaciones)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo asignaciones: ' . $e->getMessage(), 500);
         }
     }
     
@@ -100,111 +98,34 @@ class AsignacionController
             $id = (int) $args['id'];
             $data = json_decode($request->getBody()->getContents(), true);
             
-            // Obtener asignacion
             $asignacion = Database::findById('asignaciones', $id);
             if (!$asignacion) {
-                return $this->jsonResponse($response, ['error' => 'Asignacion no encontrada'], 404);
+                return $this->errorResponse($response, 'Asignación no encontrada', 404);
             }
             
             if ($asignacion['estado'] !== 'enviada') {
-                return $this->jsonResponse($response, ['error' => 'Asignacion ya procesada'], 400);
+                return $this->errorResponse($response, 'Asignación ya procesada');
             }
             
-            Database::execute("BEGIN");
-            
-            // Actualizar asignacion
-            Database::execute(
-                "UPDATE asignaciones SET 
-                 estado = 'aceptada',
-                 precio_propuesto = ?,
-                 fecha_propuesta = ?,
-                 hora_propuesta = ?,
-                 comentarios = ?,
-                 tiempo_estimado = ?,
-                 respondida_at = ?
-                 WHERE id = ?",
-                [
-                    $data['precio_propuesto'] ?? null,
-                    $data['fecha_propuesta'] ?? null,
-                    $data['hora_propuesta'] ?? null,
-                    $data['comentarios'] ?? null,
-                    $data['tiempo_estimado'] ?? null,
-                    date('Y-m-d H:i:s'),
-                    $id
-                ]
-            );
-            
-            // Actualizar solicitud
-            Database::execute(
-                "UPDATE solicitudes SET estado = 'asignada', asignada_at = ? WHERE id = ?",
-                [date('Y-m-d H:i:s'), $asignacion['solicitud_id']]
-            );
-            
-            // Expirar otras asignaciones de la misma solicitud
-            Database::execute(
-                "UPDATE asignaciones SET estado = 'expirada' 
-                 WHERE solicitud_id = ? AND id != ? AND estado = 'enviada'",
-                [$asignacion['solicitud_id'], $id]
-            );
-            
-            Database::execute("COMMIT");
-            
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'message' => 'Asignacion aceptada exitosamente'
+            Database::update('asignaciones', $id, [
+                'estado' => 'rechazada',
+                'comentarios' => $data['motivo'] ?? 'Sin motivo especificado',
+                'respondida_at' => date('Y-m-d H:i:s')
             ]);
-            
-        } catch (\Exception $e) {
-            Database::execute("ROLLBACK");
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
-        }
-    }
-    
-    public function rechazar(Request $request, Response $response, array $args): Response
-    {
-        try {
-            $id = (int) $args['id'];
-            $data = json_decode($request->getBody()->getContents(), true);
-            
-            $asignacion = Database::findById('asignaciones', $id);
-            if (!$asignacion) {
-                return $this->jsonResponse($response, ['error' => 'Asignacion no encontrada'], 404);
-            }
-            
-            if ($asignacion['estado'] !== 'enviada') {
-                return $this->jsonResponse($response, ['error' => 'Asignacion ya procesada'], 400);
-            }
-            
-            Database::execute(
-                "UPDATE asignaciones SET 
-                 estado = 'rechazada',
-                 comentarios = ?,
-                 respondida_at = ?
-                 WHERE id = ?",
-                [
-                    $data['motivo'] ?? 'Sin motivo especificado',
-                    date('Y-m-d H:i:s'),
-                    $id
-                ]
-            );
             
             // Reasignar a otro contratista disponible
             $this->reasignarSolicitud($asignacion['solicitud_id']);
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'message' => 'Asignacion rechazada'
-            ]);
+            return $this->successResponse($response, null, 'Asignación rechazada');
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error rechazando asignación: ' . $e->getMessage(), 500);
         }
     }
     
     private function reasignarSolicitud(int $solicitudId): void
     {
         try {
-            // Buscar solicitud
             $solicitud = Database::findById('solicitudes', $solicitudId);
             if (!$solicitud) return;
             
@@ -224,7 +145,6 @@ class AsignacionController
                 $queryParams = array_merge([$solicitud['categoria_id']], $contactados);
             }
             
-            // Buscar siguiente contratista disponible
             $stmt = Database::execute(
                 "SELECT u.id
                  FROM usuarios u
@@ -253,11 +173,5 @@ class AsignacionController
         } catch (\Exception $e) {
             error_log("Error reasignando solicitud: " . $e->getMessage());
         }
-    }
-    
-    private function jsonResponse(Response $response, array $data, int $status = 200): Response
-    {
-        $response->getBody()->write(json_encode($data, JSON_PRETTY_PRINT));
-        return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
     }
 }

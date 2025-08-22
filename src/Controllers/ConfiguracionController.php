@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Utils\Database;
 
-class ConfiguracionController
+class ConfiguracionController extends BaseController
 {
     public function getCategorias(Request $request, Response $response): Response
     {
@@ -19,14 +19,13 @@ class ConfiguracionController
             
             $categorias = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $categorias,
+            return $this->successResponse($response, [
+                'categorias' => $categorias,
                 'total' => count($categorias)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo categorías: ' . $e->getMessage(), 500);
         }
     }
     
@@ -43,14 +42,13 @@ class ConfiguracionController
             
             $servicios = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $servicios,
+            return $this->successResponse($response, [
+                'servicios' => $servicios,
                 'total' => count($servicios)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo servicios: ' . $e->getMessage(), 500);
         }
     }
     
@@ -58,6 +56,12 @@ class ConfiguracionController
     {
         try {
             $categoriaId = (int) $args['categoriaId'];
+            
+            // Verificar que la categoría existe
+            $categoria = Database::findById('categorias_servicios', $categoriaId);
+            if (!$categoria || !$categoria['activo']) {
+                return $this->errorResponse($response, 'Categoría no encontrada', 404);
+            }
             
             $stmt = Database::execute(
                 "SELECT s.*
@@ -69,21 +73,14 @@ class ConfiguracionController
             
             $servicios = $stmt->fetchAll();
             
-            return $this->jsonResponse($response, [
-                'success' => true,
-                'data' => $servicios,
-                'categoria_id' => $categoriaId,
+            return $this->successResponse($response, [
+                'categoria' => $categoria,
+                'servicios' => $servicios,
                 'total' => count($servicios)
             ]);
             
         } catch (\Exception $e) {
-            return $this->jsonResponse($response, ['error' => 'Error: ' . $e->getMessage()], 500);
+            return $this->errorResponse($response, 'Error obteniendo servicios: ' . $e->getMessage(), 500);
         }
-    }
-    
-    private function jsonResponse(Response $response, array $data, int $status = 200): Response
-    {
-        $response->getBody()->write(json_encode($data, JSON_PRETTY_PRINT));
-        return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
     }
 }
