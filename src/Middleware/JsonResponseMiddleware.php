@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace App\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
