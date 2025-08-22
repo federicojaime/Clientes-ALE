@@ -1,0 +1,208 @@
+🧩 FUNCIONALIDADES PROPUESTAS
+1. Comunicación y Flujo de Trabajo
+
+Solicitud de servicios por la app, pero respuesta por WhatsApp para facilitar el acceso inicial.
+
+Posibilidad de comunicación interna en la app una vez iniciado el servicio.
+
+Notificaciones automáticas desde la app al contratista.
+
+Coordinación de visitas con aprobación del contratista (flujo bidireccional).
+
+Agregar servicios
+
+Carpinteria
+Flete
+Pintura
+Cerrajeria
+Electrodomesticos 
+Gasista
+Refrige
+Electricista
+Plomeria 
+AC
+Refrigerio
+Handyman... Mantenimiento y colocación
+2. Sistema de Pago
+
+Retención mínima del pago por parte de la app antes de la visita.
+
+Posibilidad de generar presupuesto adicional en el momento. Necesitas un modelo de esto??
+
+Integración de medios de pago como Mercado Pago, tarjeta, etc.
+
+Liberación del pago solo cuando ambas partes confirman la finalización.
+
+3. Sistema de Precios
+
+Cargar precios sugeridos según convenios de colegios profesionales.
+
+Dar libertad a contratistas de editar los precios seteado por default. Crear propia oferta.
+
+Precios visibles desde el principio para el usuario. Mano de obra- Posibilidad de ampliar en el sitio(hogar) con presupuesto adicional. Ver en al pie
+
+4. Seguridad y Confianza
+
+Ranking y reseñas desde el inicio (modelo Uber, Airbnb).
+
+Ranking también para clientes (no solo para contratistas).
+
+Función de “alarma” para casos de emergencia.
+
+Posibilidad de dejar abierta la comunicación con el profesional para futuros servicios.
+
+
+Registro de ubicación, tiempo de permanencia, y trazabilidad. Google maps
+
+5. Filtros y Matching
+
+Filtros por zona geográfica para que el contratista reciba trabajos en zonas específicas.
+
+Evitar modelo “match 1 a 1” : que el pedido llegue a todos y gane el que responda primero.
+
+Calendario bloqueado para que no se agenden servicios en horarios ocupados.
+
+6. Personalización y Usabilidad
+
+Posibilidad de elegir múltiples tareas por tipo de servicio (ej: instalar 4 tomas, no solo 1).
+
+Inclusión de un botón de “describir problema” para ampliar información.
+
+Retención mínima obligatoria incluso si después se quiere cerrar por fuera.
+
+Posibilidad de armar presupuesto in situ si el contratista identifica otras problematicas en el hogar.
+El presupuesto llega en el momento al usuario cliente y este acepta y paga la totalidad del servicio, no sólo lo retenido inicialmente. Todos los medios de pago habilitados.
+
+🪪 CUMPLIMIENTO Y LEGALIDAD (COMPLIANCE)
+Solicitar documentación obligatoria (matrícula, DNI, etc.) a contratistas.
+En etapa de ONBOARDING. Selfie, Foto DNI, Matricula en caso de contratista.
+
+Tal como hablamos onboarding más flexible y accesible para cliente mediante Facebbok, google, apple... tal como hablamos.
+
+Terminos y condiciones estoy esperando me pase esto la abogada que lo trabaja en paralelo
+
+
+[19:59, 7/8/2025] Ale Tucu Ulp: OBJETIVO GENERAL
+
+Crear una plataforma donde:
+
+Un cliente final solicita un servicio técnico (ej: gasista, plomero).
+
+Contratistas reciben la solicitud, y quien la acepta primero coordina una fecha.
+
+La coordinación y pagos se hacen por WhatsApp (en principio).
+
+
+GESTIÓN DE USUARIOS
+
+Perfiles:
+
+Cliente final: Solicita servicios.
+
+Contratista: Recibe y gestiona solicitudes.
+
+
+Inicio de sesión:
+
+Login diferenciado (cliente/contratista).
+
+Acceso con Google, Facebook, Apple.
+
+FLUJO DEL CLIENTE
+
+Solicitud de servicio:
+
+Elige tipo de servicio: gasista, plomero, etc.
+
+Elige un problema predefinido (con precio base) o detalla uno personalizado.
+
+La solicitud se envía a todos los contratistas disponibles.
+
+
+FLUJO DEL CONTRATISTA
+
+Acciones:
+
+Recibe notificación de nueva solicitud.
+
+Si acepta, propone fechas y horarios disponibles (como tipo UBER).
+
+Una vez que una fecha es confirmada, bloquea ese horario para evitar conflictos.
+
+Gestiona todo como si fuera un CRM (seguimiento de clientes, estado de solicitudes, etc.).
+
+
+GESTIÓN DE CALENDARIO
+
+Herramientas:
+
+WhatsApp Business API (Twilio).
+
+Calendly o Google Calendar API.
+
+
+Flujo:
+
+1. Contratista acepta solicitud → se le solicita proponer fecha/hora.
+
+
+2. Cliente acepta o rechaza.
+
+
+3. Si rechaza → se reasigna automáticamente a otro contratista.
+
+AUTOMATIZACIONES WHATSAPP
+
+Usar botones en WhatsApp o links de Calendly.
+
+Todo gestionado con Make o Zapier.
+
+Comunicación fluida y sin necesidad de app nativa al inicio.
+
+
+PAGOS
+
+Etapas:
+
+Pago inicial por visita: se retiene pero no se cobra (captura retrasada).
+
+Pago final: se cobra cuando el cliente confirma que el problema se resolvió.
+
+Si no se resuelve → se hace reembolso automático.
+
+
+Herramienta:
+
+Mercado Pago con integración API (Google Apps Script o Make).
+[19:59, 7/8/2025] Ale Tucu Ulp: para más adelante ya que para un mvp no lo vas a necesitar:
+
+Agregar indicadores financieros para contratistas.
+
+Evolucionar hacia app móvil completa.
+
+Posiblemente usar Firebase para notificaciones push.
+[19:59, 7/8/2025] Ale Tucu Ulp: esta puede ser la organización del proyecto:
+
+
+
+Módulos para desarrollar:
+
+Módulo/	Funcionalidad	Herramientas;
+
+Login/Registro	Clientes y contratistas	Auth0, Firebase Auth, Bubble
+
+Formulario de solicitud 	Tipo de servicio, detalles, precios	Web form (Bubble / React)
+
+Gestión de contratistas	CRM liviano con estados	Google Sheets + Make
+
+Bot WhatsApp	 Interacción con clientes y contratistas	Twilio + Make
+
+Calendario	Propuesta y confirmación de fechas	Google Calendar API / Calendly
+
+Sistema de pagos 	Captura, cobro final, reembolsos	Mercado Pago API
+
+Automatizaciones	Reasignación, notificaciones, cambios de estado	Make / Apps Script
+
+Panel de administración	Visualización de solicitudes y estados	Bubble / Retool / Glide
+
+

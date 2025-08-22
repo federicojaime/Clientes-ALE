@@ -1,0 +1,1339 @@
+{
+    "info": {
+        "name": "API Servicios Técnicos - COMPLETA",
+        "description": "Colección completa de endpoints para la API de servicios técnicos",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "🏠 General",
+            "item": [
+                {
+                    "name": "Info de la API",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/",
+                            "host": [
+                                "{{baseUrl}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🔐 Autenticación",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data && response.data.token) {",
+                                    "        pm.collectionVariables.set('token', response.data.token);",
+                                    "        console.log('Token guardado:', response.data.token);",
+                                    "    }",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"juan.perez@email.com\",\n  \"password\": \"123456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Registrar Usuario",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"nombre\": \"María\",\n  \"apellido\": \"García\",\n  \"email\": \"maria.garcia@email.com\",\n  \"telefono\": \"+541187654321\",\n  \"whatsapp\": \"+541187654321\",\n  \"tipo_usuario_id\": 1,\n  \"ciudad\": \"Buenos Aires\",\n  \"provincia\": \"CABA\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Refresh Token (PENDIENTE)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "refresh"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Mi Perfil (PENDIENTE)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "me"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👥 Usuarios",
+            "item": [
+                {
+                    "name": "Listar Usuarios",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/usuarios?limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "usuarios"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Usuario por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/usuarios/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "usuarios",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📝 Solicitudes",
+            "item": [
+                {
+                    "name": "Listar Solicitudes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/solicitudes?estado=pendiente&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "solicitudes"
+                            ],
+                            "query": [
+                                {
+                                    "key": "estado",
+                                    "value": "pendiente"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Solicitud",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cliente_id\": 1,\n  \"categoria_id\": 3,\n  \"servicio_id\": 7,\n  \"titulo\": \"Destape urgente de baño\",\n  \"descripcion\": \"Baño completamente tapado, no drena nada\",\n  \"descripcion_personalizada\": \"Es en el baño principal del segundo piso, edificio con portero\",\n  \"urgencia\": \"alta\",\n  \"direccion_servicio\": \"Av. Corrientes 1234, CABA\",\n  \"latitud\": -34.6037,\n  \"longitud\": -58.3816,\n  \"fecha_preferida\": \"2025-01-15\",\n  \"hora_preferida\": \"14:00\",\n  \"flexible_horario\": 1,\n  \"presupuesto_maximo\": 15000\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/solicitudes",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "solicitudes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Solicitud por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/solicitudes/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "solicitudes",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar Estado de Solicitud",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"estado\": \"completada\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/solicitudes/1/estado",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "solicitudes",
+                                "1",
+                                "estado"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🔧 Contratistas",
+            "item": [
+                {
+                    "name": "Listar Contratistas",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/contratistas?categoria_id=3&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "contratistas"
+                            ],
+                            "query": [
+                                {
+                                    "key": "categoria_id",
+                                    "value": "3"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Contratista por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/contratistas/3",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "contratistas",
+                                "3"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar Contratistas Disponibles",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"categoria_id\": 3,\n  \"latitud\": -34.6037,\n  \"longitud\": -58.3816,\n  \"fecha_servicio\": \"2025-01-15\",\n  \"radio_km\": 15\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/contratistas/buscar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "contratistas",
+                                "buscar"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📋 Asignaciones",
+            "item": [
+                {
+                    "name": "Listar Asignaciones",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/asignaciones?estado=enviada",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "asignaciones"
+                            ],
+                            "query": [
+                                {
+                                    "key": "estado",
+                                    "value": "enviada"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Asignaciones de Contratista",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/asignaciones/contratista/3?estado=enviada",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "asignaciones",
+                                "contratista",
+                                "3"
+                            ],
+                            "query": [
+                                {
+                                    "key": "estado",
+                                    "value": "enviada"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Aceptar Asignación",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"precio_propuesto\": 12000,\n  \"fecha_propuesta\": \"2025-01-16\",\n  \"hora_propuesta\": \"10:00\",\n  \"comentarios\": \"Puedo ir mañana por la mañana, tengo todas las herramientas\",\n  \"tiempo_estimado\": 120\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/asignaciones/1/aceptar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "asignaciones",
+                                "1",
+                                "aceptar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Rechazar Asignación",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"motivo\": \"No tengo disponibilidad en esa fecha, estoy ocupado todo el día\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/asignaciones/1/rechazar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "asignaciones",
+                                "1",
+                                "rechazar"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📅 Citas",
+            "item": [
+                {
+                    "name": "Listar Citas",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/citas?estado=programada&fecha=2025-01-15",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "citas"
+                            ],
+                            "query": [
+                                {
+                                    "key": "estado",
+                                    "value": "programada"
+                                },
+                                {
+                                    "key": "fecha",
+                                    "value": "2025-01-15"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Cita",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"solicitud_id\": 1,\n  \"contratista_id\": 3,\n  \"cliente_id\": 1,\n  \"fecha_servicio\": \"2025-01-16\",\n  \"hora_inicio\": \"10:00\",\n  \"hora_fin\": \"12:00\",\n  \"precio_acordado\": 12000,\n  \"notas_cliente\": \"Portero en planta baja, departamento 4B\",\n  \"notas_contratista\": \"Llevar herramientas para destape y repuestos\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/citas",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "citas"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Confirmar Cita",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/citas/1/confirmar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "citas",
+                                "1",
+                                "confirmar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Iniciar Servicio",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/citas/1/iniciar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "citas",
+                                "1",
+                                "iniciar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Completar Servicio",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"notas_final\": \"Servicio completado exitosamente. Se destapó la cañería y se cambió la junta del inodoro.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/citas/1/completar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "citas",
+                                "1",
+                                "completar"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "⚙️ Configuración",
+            "item": [
+                {
+                    "name": "Listar Categorías",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/config/categorias",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "config",
+                                "categorias"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Servicios",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/config/servicios",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "config",
+                                "servicios"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Servicios por Categoría",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/config/servicios/categoria/3",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "config",
+                                "servicios",
+                                "categoria",
+                                "3"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "💳 Pagos (PENDIENTES)",
+            "item": [
+                {
+                    "name": "🚧 Procesar Pago Consulta",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cita_id\": 1,\n  \"monto_consulta\": 5000,\n  \"descripcion\": \"Pago de consulta inicial\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/consulta",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "consulta"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Procesar Pago Servicio",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cita_id\": 1,\n  \"monto_servicio\": 12000,\n  \"descripcion\": \"Pago final del servicio\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/servicio",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "servicio"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Capturar Pago",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/1/capturar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "1",
+                                "capturar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Reembolsar Pago",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"motivo\": \"Servicio no completado\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/1/reembolsar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "1",
+                                "reembolsar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Webhook MercadoPago",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"action\": \"payment.updated\",\n  \"api_version\": \"v1\",\n  \"data\": {\n    \"id\": \"12345678\"\n  },\n  \"date_created\": \"2025-01-15T10:00:00Z\",\n  \"id\": 987654321,\n  \"live_mode\": false,\n  \"type\": \"payment\",\n  \"user_id\": \"123456789\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/webhook/mercadopago",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "webhook",
+                                "mercadopago"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Pagos de Cita",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/pagos/cita/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "pagos",
+                                "cita",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🔔 Notificaciones (PENDIENTES)",
+            "item": [
+                {
+                    "name": "🚧 Listar Notificaciones",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/notificaciones?limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "notificaciones"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Notificaciones de Usuario",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/notificaciones/usuario/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "notificaciones",
+                                "usuario",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Marcar Notificación Leída",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/notificaciones/1/leer",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "notificaciones",
+                                "1",
+                                "leer"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Enviar Notificación Manual",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"usuario_id\": 3,\n  \"tipo\": \"sistema\",\n  \"titulo\": \"Bienvenido a la plataforma\",\n  \"mensaje\": \"Tu cuenta ha sido verificada exitosamente\",\n  \"enviar_whatsapp\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/notificaciones/enviar",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "notificaciones",
+                                "enviar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Webhook WhatsApp",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"entry\": [\n    {\n      \"id\": \"PHONE_NUMBER_ID\",\n      \"changes\": [\n        {\n          \"value\": {\n            \"messaging_product\": \"whatsapp\",\n            \"metadata\": {\n              \"display_phone_number\": \"15551234567\",\n              \"phone_number_id\": \"PHONE_NUMBER_ID\"\n            },\n            \"messages\": [\n              {\n                \"from\": \"5491123456789\",\n                \"id\": \"MESSAGE_ID\",\n                \"timestamp\": \"1642090400\",\n                \"text\": {\n                  \"body\": \"Hola, necesito un plomero urgente\"\n                },\n                \"type\": \"text\"\n              }\n            ]\n          },\n          \"field\": \"messages\"\n        }\n      ]\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/webhooks/whatsapp",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "webhooks",
+                                "whatsapp"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "⭐ Evaluaciones (PENDIENTES)",
+            "item": [
+                {
+                    "name": "🚧 Crear Evaluación",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cita_id\": 1,\n  \"evaluado_id\": 3,\n  \"tipo_evaluador\": \"cliente\",\n  \"calificacion\": 5,\n  \"comentario\": \"Excelente servicio, muy profesional y puntual\",\n  \"puntualidad\": 5,\n  \"calidad_trabajo\": 5,\n  \"comunicacion\": 4,\n  \"limpieza\": 5\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/evaluaciones",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "evaluaciones"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Evaluaciones de Cita",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/evaluaciones/cita/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "evaluaciones",
+                                "cita",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Evaluaciones de Contratista",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/evaluaciones/contratista/3?limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "evaluaciones",
+                                "contratista",
+                                "3"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🕐 Horarios (PENDIENTES)",
+            "item": [
+                {
+                    "name": "🚧 Horarios de Contratista",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/horarios/contratista/3?fecha=2025-01-15",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "horarios",
+                                "contratista",
+                                "3"
+                            ],
+                            "query": [
+                                {
+                                    "key": "fecha",
+                                    "value": "2025-01-15"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Crear Disponibilidad",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"contratista_id\": 3,\n  \"fecha\": \"2025-01-15\",\n  \"hora_inicio\": \"08:00\",\n  \"hora_fin\": \"18:00\",\n  \"disponible\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/horarios",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "horarios"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Actualizar Horario",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"disponible\": false,\n  \"motivo_no_disponible\": \"Enfermo\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/horarios/1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "horarios",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📊 Admin/Estadísticas (PENDIENTES)",
+            "item": [
+                {
+                    "name": "🚧 Dashboard General",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/admin/dashboard",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "dashboard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Estadísticas del Sistema",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/admin/estadisticas?periodo=mes",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "estadisticas"
+                            ],
+                            "query": [
+                                {
+                                    "key": "periodo",
+                                    "value": "mes"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "🚧 Gestión de Usuarios Admin",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/admin/usuarios?activo=1&tipo=contratista",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "usuarios"
+                            ],
+                            "query": [
+                                {
+                                    "key": "activo",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "tipo",
+                                    "value": "contratista"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
