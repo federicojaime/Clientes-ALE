@@ -103,6 +103,7 @@ class CitasController extends BaseController
                 return $this->errorResponse($response, $error);
             }
             
+            // Verificar que no haya conflictos de horario
             $conflictoStmt = Database::execute(
                 "SELECT id FROM citas 
                  WHERE contratista_id = ? 
@@ -116,8 +117,6 @@ class CitasController extends BaseController
                 return $this->errorResponse($response, 
                     'El contratista ya tiene una cita en ese horario', 409);
             }
-            
-            Database::beginTransaction();
             
             try {
                 $citaData = [
@@ -136,19 +135,17 @@ class CitasController extends BaseController
                 
                 $citaId = Database::insert('citas', $citaData);
                 
-                Database::execute(
-                    "UPDATE solicitudes SET estado = 'confirmada', confirmada_at = ? WHERE id = ?",
-                    [date('Y-m-d H:i:s'), $data['solicitud_id']]
-                );
-                
-                Database::commit();
+                // Actualizar estado de solicitud
+                Database::update('solicitudes', $data['solicitud_id'], [
+                    'estado' => 'confirmada',
+                    'confirmada_at' => date('Y-m-d H:i:s')
+                ]);
                 
                 return $this->successResponse($response, [
                     'cita_id' => $citaId
                 ], 'Cita creada exitosamente');
                 
             } catch (\Exception $e) {
-                Database::rollback();
                 throw $e;
             }
             
@@ -162,10 +159,10 @@ class CitasController extends BaseController
         try {
             $id = (int) $args['id'];
             
-            Database::execute(
-                "UPDATE citas SET estado = 'confirmada', confirmada_at = ? WHERE id = ?",
-                [date('Y-m-d H:i:s'), $id]
-            );
+            Database::update('citas', $id, [
+                'estado' => 'confirmada',
+                'confirmada_at' => date('Y-m-d H:i:s')
+            ]);
             
             return $this->successResponse($response, null, 'Cita confirmada');
             
@@ -179,17 +176,17 @@ class CitasController extends BaseController
         try {
             $id = (int) $args['id'];
             
-            Database::execute(
-                "UPDATE citas SET estado = 'en_curso', iniciada_at = ? WHERE id = ?",
-                [date('Y-m-d H:i:s'), $id]
-            );
+            Database::update('citas', $id, [
+                'estado' => 'en_curso',
+                'iniciada_at' => date('Y-m-d H:i:s')
+            ]);
             
+            // Actualizar solicitud
             $cita = Database::findById('citas', $id);
             if ($cita) {
-                Database::execute(
-                    "UPDATE solicitudes SET estado = 'en_progreso' WHERE id = ?",
-                    [$cita['solicitud_id']]
-                );
+                Database::update('solicitudes', $cita['solicitud_id'], [
+                    'estado' => 'en_progreso'
+                ]);
             }
             
             return $this->successResponse($response, null, 'Servicio iniciado');
@@ -205,25 +202,19 @@ class CitasController extends BaseController
             $id = (int) $args['id'];
             $data = json_decode($request->getBody()->getContents(), true);
             
-            Database::execute(
-                "UPDATE citas SET 
-                 estado = 'completada', 
-                 completada_at = ?,
-                 notas_contratista = ?
-                 WHERE id = ?",
-                [
-                    date('Y-m-d H:i:s'), 
-                    $data['notas_final'] ?? null,
-                    $id
-                ]
-            );
+            Database::update('citas', $id, [
+                'estado' => 'completada',
+                'completada_at' => date('Y-m-d H:i:s'),
+                'notas_contratista' => $data['notas_final'] ?? null
+            ]);
             
+            // Actualizar solicitud
             $cita = Database::findById('citas', $id);
             if ($cita) {
-                Database::execute(
-                    "UPDATE solicitudes SET estado = 'completada', completada_at = ? WHERE id = ?",
-                    [date('Y-m-d H:i:s'), $cita['solicitud_id']]
-                );
+                Database::update('solicitudes', $cita['solicitud_id'], [
+                    'estado' => 'completada',
+                    'completada_at' => date('Y-m-d H:i:s')
+                ]);
             }
             
             return $this->successResponse($response, null, 'Servicio completado exitosamente');

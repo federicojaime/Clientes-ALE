@@ -97,4 +97,9 @@ class Database
     {
         self::getConnection()->rollBack();
     }
+    
+    public static function lastInsertId(): int
+    {
+        return (int) self::getConnection()->lastInsertId();
+    }
 }

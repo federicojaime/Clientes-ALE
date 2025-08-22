@@ -107,6 +107,57 @@ class AsignacionController extends BaseController
                 return $this->errorResponse($response, 'Asignación ya procesada');
             }
             
+            try {
+                // Actualizar asignación
+                Database::update('asignaciones', $id, [
+                    'estado' => 'aceptada',
+                    'precio_propuesto' => $data['precio_propuesto'] ?? null,
+                    'fecha_propuesta' => $data['fecha_propuesta'] ?? null,
+                    'hora_propuesta' => $data['hora_propuesta'] ?? null,
+                    'comentarios' => $data['comentarios'] ?? null,
+                    'tiempo_estimado' => $data['tiempo_estimado'] ?? null,
+                    'respondida_at' => date('Y-m-d H:i:s')
+                ]);
+                
+                // Actualizar solicitud
+                Database::update('solicitudes', $asignacion['solicitud_id'], [
+                    'estado' => 'asignada',
+                    'asignada_at' => date('Y-m-d H:i:s')
+                ]);
+                
+                // Expirar otras asignaciones
+                Database::execute(
+                    "UPDATE asignaciones SET estado = 'expirada' 
+                     WHERE solicitud_id = ? AND id != ? AND estado = 'enviada'",
+                    [$asignacion['solicitud_id'], $id]
+                );
+                
+                return $this->successResponse($response, null, 'Asignación aceptada exitosamente');
+                
+            } catch (\Exception $e) {
+                throw $e;
+            }
+            
+        } catch (\Exception $e) {
+            return $this->errorResponse($response, 'Error aceptando asignación: ' . $e->getMessage(), 500);
+        }
+    }
+    
+    public function rechazar(Request $request, Response $response, array $args): Response
+    {
+        try {
+            $id = (int) $args['id'];
+            $data = json_decode($request->getBody()->getContents(), true);
+            
+            $asignacion = Database::findById('asignaciones', $id);
+            if (!$asignacion) {
+                return $this->errorResponse($response, 'Asignación no encontrada', 404);
+            }
+            
+            if ($asignacion['estado'] !== 'enviada') {
+                return $this->errorResponse($response, 'Asignación ya procesada');
+            }
+            
             Database::update('asignaciones', $id, [
                 'estado' => 'rechazada',
                 'comentarios' => $data['motivo'] ?? 'Sin motivo especificado',

@@ -129,8 +129,6 @@ class SolicitudController extends BaseController
                 return $this->errorResponse($response, 'Categoría no válida');
             }
             
-            Database::beginTransaction();
-            
             try {
                 $solicitudData = [
                     'cliente_id' => (int) $data['cliente_id'],
@@ -156,14 +154,11 @@ class SolicitudController extends BaseController
                 // Asignar contratistas disponibles
                 $this->asignarContratistas($solicitudId, $data['categoria_id']);
                 
-                Database::commit();
-                
                 return $this->successResponse($response, [
                     'solicitud_id' => $solicitudId
                 ], 'Solicitud creada exitosamente');
                 
             } catch (\Exception $e) {
-                Database::rollback();
                 throw $e;
             }
             

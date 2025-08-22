@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use App\Utils\Database;
+use App\Services\JWTService;
 
 class AuthMiddleware implements MiddlewareInterface
 {
@@ -14,58 +14,40 @@ class AuthMiddleware implements MiddlewareInterface
         $authHeader = $request->getHeader('Authorization');
         
         if (empty($authHeader)) {
-            return $this->unauthorizedResponse();
+            return $this->unauthorizedResponse('Token requerido');
         }
         
         $token = str_replace('Bearer ', '', $authHeader[0]);
         
         if (empty($token)) {
-            return $this->unauthorizedResponse();
+            return $this->unauthorizedResponse('Formato de token inválido');
         }
         
-        $userId = $this->validateToken($token);
+        $payload = JWTService::validateToken($token);
         
-        if (!$userId) {
-            return $this->unauthorizedResponse();
+        if (!$payload) {
+            return $this->unauthorizedResponse('Token inválido o expirado');
         }
         
-        $request = $request->withAttribute('user_id', $userId);
+        if ($payload['type'] !== 'access') {
+            return $this->unauthorizedResponse('Tipo de token inválido');
+        }
+        
+        // Agregar datos del usuario al request
+        $request = $request->withAttribute('user_id', $payload['user_id']);
+        $request = $request->withAttribute('user_email', $payload['email']);
+        $request = $request->withAttribute('user_type', $payload['tipo_usuario']);
         
         return $handler->handle($request);
     }
     
-    private function validateToken(string $token): ?int
-    {
-        try {
-            $decoded = base64_decode($token);
-            $parts = explode(':', $decoded);
-            
-            if (count($parts) !== 2) {
-                return null;
-            }
-            
-            $userId = (int) $parts[0];
-            $timestamp = (int) $parts[1];
-            
-            if ((time() - $timestamp) > (24 * 60 * 60)) {
-                return null;
-            }
-            
-            $user = Database::findById('usuarios', $userId);
-            
-            return $user && $user['activo'] ? $userId : null;
-            
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-    
-    private function unauthorizedResponse(): Response
+    private function unauthorizedResponse(string $message = 'No autorizado'): Response
     {
         $response = new \Slim\Psr7\Response();
         $data = [
-            'error' => 'Token de autorización requerido',
-            'status' => 401
+            'error' => $message,
+            'status' => 401,
+            'timestamp' => date('Y-m-d H:i:s')
         ];
         
         $response->getBody()->write(json_encode($data));
