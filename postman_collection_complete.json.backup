@@ -1,7 +1,7 @@
-﻿{
+{
     "info": {
-        "name": "API Servicios TÃ©cnicos - COMPLETA",
-        "description": "ColecciÃ³n completa de endpoints para la API de servicios tÃ©cnicos",
+        "name": "API Servicios Técnicos - COMPLETA",
+        "description": "Colección completa de endpoints para la API de servicios técnicos",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "variable": [
@@ -18,7 +18,7 @@
     ],
     "item": [
         {
-            "name": "ðŸ  General",
+            "name": "🏠 General",
             "item": [
                 {
                     "name": "Info de la API",
@@ -36,7 +36,7 @@
             ]
         },
         {
-            "name": "ðŸ” AutenticaciÃ³n",
+            "name": "🔐 Autenticación",
             "item": [
                 {
                     "name": "Login",
@@ -94,7 +94,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"nombre\": \"MarÃ­a\",\n  \"apellido\": \"GarcÃ­a\",\n  \"email\": \"maria.garcia@email.com\",\n  \"telefono\": \"+541187654321\",\n  \"whatsapp\": \"+541187654321\",\n  \"tipo_usuario_id\": 1,\n  \"ciudad\": \"Buenos Aires\",\n  \"provincia\": \"CABA\"\n}"
+                            "raw": "{\n  \"nombre\": \"María\",\n  \"apellido\": \"García\",\n  \"email\": \"maria.garcia@email.com\",\n  \"telefono\": \"+541187654321\",\n  \"whatsapp\": \"+541187654321\",\n  \"tipo_usuario_id\": 1,\n  \"ciudad\": \"Buenos Aires\",\n  \"provincia\": \"CABA\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/auth/register",
@@ -111,7 +111,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Refresh Token (PENDIENTE)",
+                    "name": "🚧 Refresh Token (PENDIENTE)",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -135,7 +135,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Mi Perfil (PENDIENTE)",
+                    "name": "🚧 Mi Perfil (PENDIENTE)",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -161,7 +161,7 @@
             ]
         },
         {
-            "name": "ðŸ‘¥ Usuarios",
+            "name": "👥 Usuarios",
             "item": [
                 {
                     "name": "Listar Usuarios",
@@ -209,7 +209,7 @@
             ]
         },
         {
-            "name": "ðŸ“ Solicitudes",
+            "name": "📝 Solicitudes",
             "item": [
                 {
                     "name": "Listar Solicitudes",
@@ -255,7 +255,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"cliente_id\": 1,\n  \"categoria_id\": 3,\n  \"servicio_id\": 7,\n  \"titulo\": \"Destape urgente de baÃ±o\",\n  \"descripcion\": \"BaÃ±o completamente tapado, no drena nada\",\n  \"descripcion_personalizada\": \"Es en el baÃ±o principal del segundo piso, edificio con portero\",\n  \"urgencia\": \"alta\",\n  \"direccion_servicio\": \"Av. Corrientes 1234, CABA\",\n  \"latitud\": -34.6037,\n  \"longitud\": -58.3816,\n  \"fecha_preferida\": \"2025-01-15\",\n  \"hora_preferida\": \"14:00\",\n  \"flexible_horario\": 1,\n  \"presupuesto_maximo\": 15000\n}"
+                            "raw": "{\n  \"cliente_id\": 1,\n  \"categoria_id\": 3,\n  \"servicio_id\": 7,\n  \"titulo\": \"Destape urgente de baño\",\n  \"descripcion\": \"Baño completamente tapado, no drena nada\",\n  \"descripcion_personalizada\": \"Es en el baño principal del segundo piso, edificio con portero\",\n  \"urgencia\": \"alta\",\n  \"direccion_servicio\": \"Av. Corrientes 1234, CABA\",\n  \"latitud\": -34.6037,\n  \"longitud\": -58.3816,\n  \"fecha_preferida\": \"2025-01-15\",\n  \"hora_preferida\": \"14:00\",\n  \"flexible_horario\": 1,\n  \"presupuesto_maximo\": 15000\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/solicitudes",
@@ -325,7 +325,7 @@
             ]
         },
         {
-            "name": "ðŸ”§ Contratistas",
+            "name": "🔧 Contratistas",
             "item": [
                 {
                     "name": "Listar Contratistas",
@@ -405,7 +405,7 @@
             ]
         },
         {
-            "name": "ðŸ“‹ Asignaciones",
+            "name": "📋 Asignaciones",
             "item": [
                 {
                     "name": "Listar Asignaciones",
@@ -463,7 +463,7 @@
                     }
                 },
                 {
-                    "name": "Aceptar AsignaciÃ³n",
+                    "name": "Aceptar Asignación",
                     "request": {
                         "method": "PUT",
                         "header": [
@@ -478,7 +478,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"precio_propuesto\": 12000,\n  \"fecha_propuesta\": \"2025-01-16\",\n  \"hora_propuesta\": \"10:00\",\n  \"comentarios\": \"Puedo ir maÃ±ana por la maÃ±ana, tengo todas las herramientas\",\n  \"tiempo_estimado\": 120\n}"
+                            "raw": "{\n  \"precio_propuesto\": 12000,\n  \"fecha_propuesta\": \"2025-01-16\",\n  \"hora_propuesta\": \"10:00\",\n  \"comentarios\": \"Puedo ir mañana por la mañana, tengo todas las herramientas\",\n  \"tiempo_estimado\": 120\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/asignaciones/1/aceptar",
@@ -496,7 +496,7 @@
                     }
                 },
                 {
-                    "name": "Rechazar AsignaciÃ³n",
+                    "name": "Rechazar Asignación",
                     "request": {
                         "method": "PUT",
                         "header": [
@@ -511,7 +511,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"motivo\": \"No tengo disponibilidad en esa fecha, estoy ocupado todo el dÃ­a\"\n}"
+                            "raw": "{\n  \"motivo\": \"No tengo disponibilidad en esa fecha, estoy ocupado todo el día\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/asignaciones/1/rechazar",
@@ -531,7 +531,7 @@
             ]
         },
         {
-            "name": "ðŸ“… Citas",
+            "name": "📅 Citas",
             "item": [
                 {
                     "name": "Listar Citas",
@@ -658,7 +658,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"notas_final\": \"Servicio completado exitosamente. Se destapÃ³ la caÃ±erÃ­a y se cambiÃ³ la junta del inodoro.\"\n}"
+                            "raw": "{\n  \"notas_final\": \"Servicio completado exitosamente. Se destapó la cañería y se cambió la junta del inodoro.\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/citas/1/completar",
@@ -678,10 +678,10 @@
             ]
         },
         {
-            "name": "âš™ï¸ ConfiguraciÃ³n",
+            "name": "⚙️ Configuración",
             "item": [
                 {
-                    "name": "Listar CategorÃ­as",
+                    "name": "Listar Categorías",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -719,7 +719,7 @@
                     }
                 },
                 {
-                    "name": "Servicios por CategorÃ­a",
+                    "name": "Servicios por Categoría",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -742,10 +742,10 @@
             ]
         },
         {
-            "name": "ðŸ’³ Pagos (PENDIENTES)",
+            "name": "💳 Pagos (PENDIENTES)",
             "item": [
                 {
-                    "name": "ðŸš§ Procesar Pago Consulta",
+                    "name": "🚧 Procesar Pago Consulta",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -777,7 +777,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Procesar Pago Servicio",
+                    "name": "🚧 Procesar Pago Servicio",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -809,7 +809,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Capturar Pago",
+                    "name": "🚧 Capturar Pago",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -834,7 +834,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Reembolsar Pago",
+                    "name": "🚧 Reembolsar Pago",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -867,7 +867,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Webhook MercadoPago",
+                    "name": "🚧 Webhook MercadoPago",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -896,7 +896,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Pagos de Cita",
+                    "name": "🚧 Pagos de Cita",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -923,10 +923,10 @@
             ]
         },
         {
-            "name": "ðŸ”” Notificaciones (PENDIENTES)",
+            "name": "🔔 Notificaciones (PENDIENTES)",
             "item": [
                 {
-                    "name": "ðŸš§ Listar Notificaciones",
+                    "name": "🚧 Listar Notificaciones",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -955,7 +955,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Notificaciones de Usuario",
+                    "name": "🚧 Notificaciones de Usuario",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -980,7 +980,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Marcar NotificaciÃ³n LeÃ­da",
+                    "name": "🚧 Marcar Notificación Leída",
                     "request": {
                         "method": "PUT",
                         "header": [
@@ -1005,7 +1005,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Enviar NotificaciÃ³n Manual",
+                    "name": "🚧 Enviar Notificación Manual",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1037,7 +1037,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Webhook WhatsApp",
+                    "name": "🚧 Webhook WhatsApp",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1067,10 +1067,10 @@
             ]
         },
         {
-            "name": "â­ Evaluaciones (PENDIENTES)",
+            "name": "⭐ Evaluaciones (PENDIENTES)",
             "item": [
                 {
-                    "name": "ðŸš§ Crear EvaluaciÃ³n",
+                    "name": "🚧 Crear Evaluación",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1101,7 +1101,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Evaluaciones de Cita",
+                    "name": "🚧 Evaluaciones de Cita",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -1121,7 +1121,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Evaluaciones de Contratista",
+                    "name": "🚧 Evaluaciones de Contratista",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -1149,10 +1149,10 @@
             ]
         },
         {
-            "name": "ðŸ• Horarios (PENDIENTES)",
+            "name": "🕐 Horarios (PENDIENTES)",
             "item": [
                 {
-                    "name": "ðŸš§ Horarios de Contratista",
+                    "name": "🚧 Horarios de Contratista",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -1178,7 +1178,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Crear Disponibilidad",
+                    "name": "🚧 Crear Disponibilidad",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1209,7 +1209,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ Actualizar Horario",
+                    "name": "🚧 Actualizar Horario",
                     "request": {
                         "method": "PUT",
                         "header": [
@@ -1243,10 +1243,10 @@
             ]
         },
         {
-            "name": "ðŸ“Š Admin/EstadÃ­sticas (PENDIENTES)",
+            "name": "📊 Admin/Estadísticas (PENDIENTES)",
             "item": [
                 {
-                    "name": "ðŸš§ Dashboard General",
+                    "name": "🚧 Dashboard General",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -1270,7 +1270,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ EstadÃ­sticas del Sistema",
+                    "name": "🚧 Estadísticas del Sistema",
                     "request": {
                         "method": "GET",
                         "header": [
@@ -1300,7 +1300,7 @@
                     }
                 },
                 {
-                    "name": "ðŸš§ GestiÃ³n de Usuarios Admin",
+                    "name": "🚧 Gestión de Usuarios Admin",
                     "request": {
                         "method": "GET",
                         "header": [
